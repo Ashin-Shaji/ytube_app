@@ -123,6 +123,53 @@ def generate_gemini_content(transcript_text, prompt, max_output_tokens=None):
         st.error("Can't generate summary")
         return ""
 
+# def convert_to_wav(input_file, output_file):
+#     try:
+#         audio = AudioSegment.from_file(input_file)
+#         audio.export(output_file, format="wav")
+#         print(f"Converted {input_file} to {output_file}")
+#     except Exception as e:
+#         print(f"An error occurred while converting to WAV: {e}")
+
+# def delete_file(file_path):
+#     try:
+#         os.remove(file_path)
+#         print(f"Deleted file: {file_path}")
+#     except Exception as e:
+#         print(f"An error occurred while deleting the file: {e}")
+
+# def download_audio(video_url, output_path):
+#     try:
+#         yt = YouTube(video_url)
+#         video_title = yt.title
+#         audio_stream = yt.streams.filter(only_audio=True).first()
+#         downloaded_file = audio_stream.download(output_path=output_path)
+#         # st.success(f"Audio downloaded successfully to {downloaded_file}")
+#         return downloaded_file, video_title
+#     except Exception as e:
+#         st.error(f"An error occurred: {e}")
+#         return None, None
+
+# def transcribe_audio(file_path, language='en-US', retries=3):
+#     r = sr.Recognizer()
+#     for attempt in range(retries):
+#         try:
+#             with sr.AudioFile(file_path) as source:
+#                 audio_text = r.record(source)
+#                 text = r.recognize_google(audio_text, language=language)
+#                 print("Transcription completed successfully")
+#                 return text
+#         except sr.UnknownValueError:
+#             print("Could not understand audio")
+#             return ""
+#         except sr.RequestError as req:
+#             print(f"Error fetching results from Google Web Speech API: {req}")
+#             if attempt < retries - 1:
+#                 time.sleep(2)  # Wait for 2 seconds before retrying
+#             else:
+#                 return f"Transcription failed after {retries} attempts."
+
+#streamlit main
 def convert_to_wav(input_file, output_file):
     try:
         audio = AudioSegment.from_file(input_file)
@@ -131,20 +178,12 @@ def convert_to_wav(input_file, output_file):
     except Exception as e:
         print(f"An error occurred while converting to WAV: {e}")
 
-def delete_file(file_path):
-    try:
-        os.remove(file_path)
-        print(f"Deleted file: {file_path}")
-    except Exception as e:
-        print(f"An error occurred while deleting the file: {e}")
-
 def download_audio(video_url, output_path):
     try:
         yt = YouTube(video_url)
         video_title = yt.title
         audio_stream = yt.streams.filter(only_audio=True).first()
         downloaded_file = audio_stream.download(output_path=output_path)
-        # st.success(f"Audio downloaded successfully to {downloaded_file}")
         return downloaded_file, video_title
     except Exception as e:
         st.error(f"An error occurred: {e}")
@@ -168,8 +207,6 @@ def transcribe_audio(file_path, language='en-US', retries=3):
                 time.sleep(2)  # Wait for 2 seconds before retrying
             else:
                 return f"Transcription failed after {retries} attempts."
-
-#streamlit main
 #summarizer
 def main1():
     st.markdown(
@@ -346,12 +383,111 @@ def main3():
             st.subheader("Generated Response:")
             st.markdown(f"**{res}**")
 
+# def main4():
+#     # Streamlit UI
+#     st.title("YouTube/MP4 Audio Transcriber and Summarizer")
+#     st.markdown("""<style>.stButton > button {display: block;margin: 0 auto;}</style>""", unsafe_allow_html=True)
+
+#     output_path = '/tmp/amios'
+#     if not os.path.exists(output_path):
+#         os.makedirs(output_path)
+
+#     # Initialize session state variables
+#     if 'video_selected' not in st.session_state:
+#         st.session_state['video_selected'] = False
+#     if 'file_uploaded' not in st.session_state:
+#         st.session_state['file_uploaded'] = False
+#     if 'existing_video_selected' not in st.session_state:
+#         st.session_state['existing_video_selected'] = False
+
+#     video_url = st.text_input("Enter YouTube video URL:", disabled=st.session_state['video_selected'] or st.session_state['file_uploaded'] or st.session_state['existing_video_selected'])
+
+#     uploaded_file = st.file_uploader("Or upload an MP4 file", type=["mp4"], disabled=st.session_state['video_selected'] or bool(video_url) or st.session_state['existing_video_selected'])
+#     outputt_path = '/tmp/Untitled Folder' 
+  
+#     if not os.path.exists(outputt_path):
+#       os.makedirs(outputt_path)
+  
+#     existing_videos = [f for f in os.listdir(outputt_path) if f.endswith('.mp4')]
+#     selected_video = st.selectbox("Or select an existing video", [""] + existing_videos, index=0, disabled=bool(video_url) or uploaded_file is not None)
+
+#     # Update session state based on user input
+#     if selected_video and selected_video != "":
+#         st.session_state['existing_video_selected'] = True
+#         st.session_state['video_selected'] = True
+#         st.session_state['file_uploaded'] = False
+#         video_url = None
+#         uploaded_file = None
+#     elif uploaded_file:
+#         st.session_state['file_uploaded'] = True
+#         st.session_state['video_selected'] = False
+#         st.session_state['existing_video_selected'] = False
+#         video_url = None
+#     elif video_url:
+#         st.session_state['file_uploaded'] = False
+#         st.session_state['video_selected'] = False
+#         st.session_state['existing_video_selected'] = False
+
+#     if selected_video and selected_video != "":
+#         st.video(os.path.join(outputt_path, selected_video))
+#     elif uploaded_file:
+#         st.video(uploaded_file)
+#     elif video_url:
+#         video_id = video_url.split("v=")[-1] if "v=" in video_url else video_url.split("/")[-1].split("?")[0]
+#         st.video(f"https://www.youtube.com/embed/{video_id}")
+
+#     if st.button("Transcribe"):
+#         with st.spinner('Processing...'):
+#             if video_url:
+#                 downloaded_file, video_title = download_audio(video_url, output_path)
+#             elif uploaded_file:
+#                 downloaded_file = os.path.join(output_path, uploaded_file.name)
+#                 with open(downloaded_file, "wb") as f:
+#                     f.write(uploaded_file.getbuffer())
+#                 video_title = os.path.splitext(uploaded_file.name)[0]
+#             elif selected_video:
+#                 downloaded_file = os.path.join(outputt_path, selected_video)
+#                 video_title = os.path.splitext(selected_video)[0]
+#             else:
+#                 st.error("Please enter a YouTube URL, upload an MP4 file, or select an existing video.")
+#                 st.stop()
+
+#             if downloaded_file:
+#                 wav_output_file = os.path.splitext(downloaded_file)[0] + '.wav'
+#                 convert_to_wav(downloaded_file, wav_output_file)
+#                 # delete_file(downloaded_file)
+
+#                 text = transcribe_audio(wav_output_file)
+#                 if text:
+#                     transcription_filename = f"{video_title}.txt".replace(" ", "_").replace("/", "_")
+#                     file_path = os.path.join(output_path, transcription_filename)
+#                     with open(file_path, "w") as file:
+#                         file.write(text)
+#                     st.success("Transcription completed successfully")
+#                     with st.expander("Transcript"):
+#                         st.markdown(f"#### {video_title}\n\n{text}")
+
+#                     # Generate summary using Gemini model
+#                     prompt = """You are a YouTube transcript summarizer. You will take youtube video transcript and provide detailed
+#                     summary about major points discussed within 250 words. Never mention the name of the person"""
+#                     try:
+#                         summary = generate_gemini_content(text, prompt)
+#                         st.markdown('## **Summary**')
+#                         st.markdown(summary)
+#                     except Exception as e:
+#                         st.error("Can't generate summary")
+
+                # delete_file(wav_output_file)
+
 def main4():
     # Streamlit UI
     st.title("YouTube/MP4 Audio Transcriber and Summarizer")
     st.markdown("""<style>.stButton > button {display: block;margin: 0 auto;}</style>""", unsafe_allow_html=True)
 
+    # Define output paths
     output_path = '/tmp/amios'
+    
+    # Create folder if it doesn't exist
     if not os.path.exists(output_path):
         os.makedirs(output_path)
 
@@ -363,15 +499,12 @@ def main4():
     if 'existing_video_selected' not in st.session_state:
         st.session_state['existing_video_selected'] = False
 
+    # User inputs
     video_url = st.text_input("Enter YouTube video URL:", disabled=st.session_state['video_selected'] or st.session_state['file_uploaded'] or st.session_state['existing_video_selected'])
-
     uploaded_file = st.file_uploader("Or upload an MP4 file", type=["mp4"], disabled=st.session_state['video_selected'] or bool(video_url) or st.session_state['existing_video_selected'])
-    outputt_path = '/tmp/Untitled Folder' 
-  
-    if not os.path.exists(outputt_path):
-      os.makedirs(outputt_path)
-  
-    existing_videos = [f for f in os.listdir(outputt_path) if f.endswith('.mp4')]
+    
+    # List existing videos
+    existing_videos = [f for f in os.listdir(output_path) if f.endswith('.mp4')]
     selected_video = st.selectbox("Or select an existing video", [""] + existing_videos, index=0, disabled=bool(video_url) or uploaded_file is not None)
 
     # Update session state based on user input
@@ -391,34 +524,45 @@ def main4():
         st.session_state['video_selected'] = False
         st.session_state['existing_video_selected'] = False
 
+    # Display selected video
     if selected_video and selected_video != "":
-        st.video(os.path.join(outputt_path, selected_video))
+        st.video(os.path.join(output_path, selected_video))
     elif uploaded_file:
         st.video(uploaded_file)
     elif video_url:
         video_id = video_url.split("v=")[-1] if "v=" in video_url else video_url.split("/")[-1].split("?")[0]
         st.video(f"https://www.youtube.com/embed/{video_id}")
 
+    # Process video
     if st.button("Transcribe"):
         with st.spinner('Processing...'):
-            if video_url:
-                downloaded_file, video_title = download_audio(video_url, output_path)
-            elif uploaded_file:
-                downloaded_file = os.path.join(output_path, uploaded_file.name)
-                with open(downloaded_file, "wb") as f:
-                    f.write(uploaded_file.getbuffer())
-                video_title = os.path.splitext(uploaded_file.name)[0]
-            elif selected_video:
-                downloaded_file = os.path.join(outputt_path, selected_video)
-                video_title = os.path.splitext(selected_video)[0]
-            else:
-                st.error("Please enter a YouTube URL, upload an MP4 file, or select an existing video.")
-                st.stop()
+            try:
+                if video_url:
+                    downloaded_file, video_title = download_audio(video_url, output_path)
+                elif uploaded_file:
+                    downloaded_file = os.path.join(output_path, uploaded_file.name)
+                    with open(downloaded_file, "wb") as f:
+                        f.write(uploaded_file.getbuffer())
+                    video_title = os.path.splitext(uploaded_file.name)[0]
+                elif selected_video:
+                    downloaded_file = os.path.join(output_path, selected_video)
+                    video_title = os.path.splitext(selected_video)[0]
+                else:
+                    st.error("Please enter a YouTube URL, upload an MP4 file, or select an existing video.")
+                    st.stop()
 
-            if downloaded_file:
+                # Check if the downloaded file exists
+                if not os.path.exists(downloaded_file):
+                    st.error("Downloaded file does not exist.")
+                    st.stop()
+
                 wav_output_file = os.path.splitext(downloaded_file)[0] + '.wav'
                 convert_to_wav(downloaded_file, wav_output_file)
-                # delete_file(downloaded_file)
+
+                # Check if the WAV file exists
+                if not os.path.exists(wav_output_file):
+                    st.error("Converted WAV file does not exist.")
+                    st.stop()
 
                 text = transcribe_audio(wav_output_file)
                 if text:
@@ -439,8 +583,12 @@ def main4():
                         st.markdown(summary)
                     except Exception as e:
                         st.error("Can't generate summary")
-
-                # delete_file(wav_output_file)
+            except PermissionError:
+                st.error("Permission error: Unable to create or write to the specified directory.")
+            except FileNotFoundError as e:
+                st.error(f"File not found error: {e}")
+            except Exception as e:
+                st.error(f"An error occurred: {e}")
 
 selected_option = st.radio("Select an option:",
       ["YouTube Video Transcript Summarizer", "YouTube Video Keyword Content Analyzer","YouTube Video Question Answering",
