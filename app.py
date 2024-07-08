@@ -926,7 +926,7 @@ def main4():
                     st.error("Downloaded file does not exist.")
                     st.stop()
                 else:
-                    st.info(f"Downloaded file path: {downloaded_file}")
+                    st.caption(f"Downloaded file path: {downloaded_file}")
 
                 wav_output_file = os.path.splitext(downloaded_file)[0] + '.wav'
                 convert_to_wav(downloaded_file, wav_output_file)
@@ -944,7 +944,7 @@ def main4():
                     file_path = os.path.join(output_path, transcription_filename)
                     with open(file_path, "w") as file:
                         file.write(text)
-                    st.success("Transcription completed successfully")
+                    # st.success("Transcription completed successfully")
                     st.caption(f"Transcription file path: {file_path}")
                     with st.expander("Transcript"):
                         st.markdown(f"#### {video_title}\n\n{text}")
