@@ -98,6 +98,7 @@ def merge_transcript(transcript, interval_minutes=5):
         return None
 
 def generate_gemini_content(transcript_text, prompt, max_output_tokens=None):
+  with st.spinner('Summarizing...'):
     try:
         os.environ['GOOGLE_API_KEY'] = 'AIzaSyBbepUh8x3CqpkxNFnJ1IX0dFc0UNTwwbU'  # Replace with your API key
         genai.configure(api_key=os.environ['GOOGLE_API_KEY'])
@@ -135,6 +136,7 @@ if not os.path.exists(output_path):
     os.makedirs(output_path)
   
 def convert_to_wav(input_file, output_file):
+  with st.spinner('Converting audio to WAV...'):
     try:
         audio_clip = AudioFileClip(input_file)
         audio_clip.write_audiofile(output_file)
@@ -143,6 +145,7 @@ def convert_to_wav(input_file, output_file):
         print(f"An error occurred while converting to WAV: {e}")
 
 def download_audio(video_url, output_path):
+  with st.spinner('Downloading audio...'):
     try:
         yt = YouTube(video_url)
         video_title = yt.title
