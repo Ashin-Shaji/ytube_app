@@ -170,6 +170,11 @@ def generate_gemini_content(transcript_text, prompt, max_output_tokens=None):
 #                 return f"Transcription failed after {retries} attempts."
 
 #streamlit main
+# Ensure the temporary directory exists
+output_path = '/tmp/amios'
+if not os.path.exists(output_path):
+    os.makedirs(output_path)
+
 def convert_to_wav(input_file, output_file):
     try:
         audio = AudioSegment.from_file(input_file)
