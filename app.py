@@ -301,33 +301,6 @@ def main2():
             st.markdown(concise_explanation)
 
 #quest answering
-# def main3():
-#     st.title("YouTube Video Question Answering")
-#     # Input for YouTube video link
-#     youtube_link = st.text_input("Enter YouTube Video Link:")
-#     col1, col2 = st.columns([5, 3])
-#     if youtube_link:
-#         with col1:
-#           video_id = st.session_state.youtube_link.split("=")[1]
-#           st.video(f"https://www.youtube.com/watch?v={video_id}", format="video/mp4")
-#             # st.video(f"https://www.youtube.com/watch?v={youtube_link.split("=")[1]}", format="video/mp4")
-#         # User query input
-#         user_query = st.text_area("Enter your query:")
-
-#         # Prompt for extracting keywords
-#         prompt = f"""you are an assistant who can analyze video transcript and answer user query: '{user_query}' in 50 words,
-#         based on the transcript of the video, you will never generate random/creative/not genuine responses on your own,
-#         never talk out of the context"""
-#         # Extract transcript (you should replace this with your actual function)
-#         transcript = extract_transcript_detailss(youtube_link)
-#         with st.expander('Show Transcript'):
-#             st.markdown(transcript)
-#         # Generate content based on the transcript and user query (replace with your function)
-#         if user_query:
-#             res = generate_gemini_content(transcript, prompt, max_output_tokens=100)
-#             st.subheader("Generated Response:")
-#             st.markdown(f"**{res}**")
-
 def main3():
     st.title("YouTube Video Question Answering")
 
