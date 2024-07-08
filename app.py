@@ -137,7 +137,8 @@ if not os.path.exists(output_path):
   
 def convert_to_wav(input_file, output_file):
     try:
-        st.status('Converting audio to WAV...')
+        status_text = st.empty()
+        status_text.info("Converting audio to WAV...")
         audio_clip = AudioFileClip(input_file)
         audio_clip.write_audiofile(output_file)
         print(f"Converted {input_file} to {output_file}")
@@ -162,7 +163,8 @@ def transcribe_audio(file_path, language='en-US', retries=3):
     r = sr.Recognizer()
     for attempt in range(retries):
         try:
-            st.status('Transcribing...')
+            status_text = st.empty()
+            status_text.info("Transcribing...")
             with sr.AudioFile(file_path) as source:
                 audio_text = r.record(source)
                 text = r.recognize_google(audio_text, language=language)
