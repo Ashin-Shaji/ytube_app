@@ -440,10 +440,8 @@ def main4():
                     except Exception as e:
                         st.error("Can't generate summary")
 
-                delete_file(wav_output_file)
+                # delete_file(wav_output_file)
 
-# if __name__ == "__main__":
-#     main4()
 selected_option = st.radio("Select an option:",
       ["YouTube Video Transcript Summarizer", "YouTube Video Keyword Content Analyzer","YouTube Video Question Answering",
        "YouTube/MP4 Audio Transcriber and Summarizer"])
