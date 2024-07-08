@@ -647,7 +647,7 @@ def download_audio(video_url, output_path):
         video_title = yt.title
         audio_stream = yt.streams.filter(only_audio=True).first()
         downloaded_file = audio_stream.download(output_path=output_path)
-        st.caption(f"Audio downloaded successfully to {downloaded_file}")
+        # st.caption(f"Audio downloaded successfully to {downloaded_file}")
         return downloaded_file, video_title
     except Exception as e:
         st.exception(f"An error occurred: {e}")
