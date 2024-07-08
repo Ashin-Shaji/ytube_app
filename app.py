@@ -781,7 +781,7 @@ def main2():
 
         # Generate content based on the transcript (replace with your function)
         if not st.session_state.gemini_response:
-            st.session_state.gemini_response = generate_gemini_content(merged_text, prompt, max_output_tokens=50)
+            st.session_state.gemini_response = generate_gemini_content(merged_text, prompt, max_output_tokens=100)
 
         with st.expander('Show Transcript'):
             st.markdown(merged_text)
