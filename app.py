@@ -294,7 +294,7 @@ def main2():
         if options:
             # Prompt for concise explanation
             prompt_explanation = f"""You are an assistant who can analyze the youTube video transcript 
-            and provide a summary of what the transcript says about the following keywords: {st.session_state.selected_keywords}. Note that you should provide the
+            and provide a summary of what the transcript says about the following keywords: {options}. Note that you should provide the
             answers based on the transcript only."""
             # Generate content for the explanation (replace with your function)
             concise_explanation = generate_gemini_content(merged_text, prompt_explanation)
