@@ -505,7 +505,7 @@ from moviepy.editor import AudioFileClip
 
 prompt="""You are Youtube video summarizer. You will be taking the transcript text and summarizing the entire video and providing
                     the overall summary get the major points discussed,never mention the name odf the person
-                    within 250 words in following format. Please provide the summary of the text given here:"""
+                    within 300 words in following format. Please provide the summary of the text given here:"""
 
 def get_video_duration(youtube_video_url):
     try:
@@ -781,7 +781,7 @@ def main2():
 
         # Generate content based on the transcript (replace with your function)
         if not st.session_state.gemini_response:
-            st.session_state.gemini_response = generate_gemini_content(merged_text, prompt)
+            st.session_state.gemini_response = generate_gemini_content(merged_text, prompt, max_output_tokens=50)
 
         with st.expander('Show Transcript'):
             st.markdown(merged_text)
@@ -799,7 +799,7 @@ def main2():
         if options:
             # Prompt for concise explanation
             prompt_explanation = f"""You are an assistant who can analyze the following YouTube video transcript: {merged_text}
-            and provide a summary of what the transcript says about the following keywords: {options}. Note that you should provide the
+            and provide a summary of what the transcript says about the following keywords: {options} in 250 words. Note that you should provide the
             answers based on the transcript only."""
             # Generate content for the explanation (replace with your function)
             concise_explanation = generate_gemini_content(merged_text, prompt_explanation)
@@ -844,7 +844,7 @@ def main3():
 
         # Generate content based on the transcript and user query (replace with your function)
         if user_query:
-            res = generate_gemini_content(merged_text, prompt, max_output_tokens=100)
+            res = generate_gemini_content(merged_text, prompt, max_output_tokens=240)
             st.subheader("Generated Response:")
             st.markdown(f"**{res}**")
 
@@ -950,7 +950,7 @@ def main4():
                         st.markdown(f"#### {video_title}\n\n{text}")
 
                     # Generate summary using Gemini model
-                    prompt = """You are a YouTube transcript summarizer. You will take youtube video transcript and provide detailed
+                    prompt = """You are a YouTube transcript summarizer. You will take youtube video transcript and provide 
                     summary about major points discussed within 250 words. Never mention the name of the person"""
                     try:
                         summary = generate_gemini_content(text, prompt)
