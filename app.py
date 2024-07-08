@@ -99,6 +99,7 @@ def merge_transcript(transcript, interval_minutes=5):
 
 def generate_gemini_content(transcript_text, prompt, max_output_tokens=None):
     try:
+        st.status('Summarizing...')
         os.environ['GOOGLE_API_KEY'] = 'AIzaSyBbepUh8x3CqpkxNFnJ1IX0dFc0UNTwwbU'  # Replace with your API key
         genai.configure(api_key=os.environ['GOOGLE_API_KEY'])
 
@@ -136,6 +137,7 @@ if not os.path.exists(output_path):
   
 def convert_to_wav(input_file, output_file):
     try:
+        st.status('Converting audio to WAV...')
         audio_clip = AudioFileClip(input_file)
         audio_clip.write_audiofile(output_file)
         print(f"Converted {input_file} to {output_file}")
@@ -144,6 +146,7 @@ def convert_to_wav(input_file, output_file):
 
 def download_audio(video_url, output_path):
     try:
+        st.status('Downloading audio...')
         yt = YouTube(video_url)
         video_title = yt.title
         audio_stream = yt.streams.filter(only_audio=True).first()
@@ -158,6 +161,7 @@ def transcribe_audio(file_path, language='en-US', retries=3):
     r = sr.Recognizer()
     for attempt in range(retries):
         try:
+            st.status('Transcribing...')
             with sr.AudioFile(file_path) as source:
                 audio_text = r.record(source)
                 text = r.recognize_google(audio_text, language=language)
