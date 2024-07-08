@@ -146,7 +146,8 @@ def convert_to_wav(input_file, output_file):
 
 def download_audio(video_url, output_path):
     try:
-        st.status('Downloading audio...')
+        status_text = st.empty()
+        status_text.info("Downloading audio...")
         yt = YouTube(video_url)
         video_title = yt.title
         audio_stream = yt.streams.filter(only_audio=True).first()
