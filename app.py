@@ -250,6 +250,8 @@ def main2():
     # Initialize session state variables
     if 'selected_keywords' not in st.session_state:
         st.session_state.selected_keywords = []
+    if 'gemini_response' not in st.session_state:
+        st.session_state.gemini_response = ""
 
     # Input for YouTube video link
     youtube_link = st.text_input("Enter YouTube Video Link:")
@@ -276,13 +278,14 @@ def main2():
             merged_text += f"{timestamp}: {text}\n"
 
         # Generate content based on the transcript (replace with your function)
-        res = generate_gemini_content(merged_text, prompt)
+        if not st.session_state.gemini_response:
+            st.session_state.gemini_response = generate_gemini_content(merged_text, prompt)
 
         with st.expander('Show Transcript'):
             st.markdown(merged_text)
 
         # Convert the result to a Python list
-        my_list = ast.literal_eval(res)
+        my_list = ast.literal_eval(st.session_state.gemini_response)
 
         # Display multiselect box
         options = st.multiselect("Select keywords", my_list, default=st.session_state.selected_keywords)
@@ -293,7 +296,7 @@ def main2():
 
         if options:
             # Prompt for concise explanation
-            prompt_explanation = f"""You are an assistant who can analyze the youTube video transcript 
+            prompt_explanation = f"""You are an assistant who can analyze the following YouTube video transcript: {merged_text}
             and provide a summary of what the transcript says about the following keywords: {options}. Note that you should provide the
             answers based on the transcript only."""
             # Generate content for the explanation (replace with your function)
