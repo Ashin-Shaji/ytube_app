@@ -6,6 +6,7 @@ from youtube_transcript_api import YouTubeTranscriptApi
 from pytube import YouTube
 from pydub import AudioSegment
 import time
+from moviepy.editor import AudioFileClip
 
 prompt="""You are Youtube video summarizer. You will be taking the transcript text and summarizing the entire video and providing
                     the overall summary get the major points discussed,never mention the name odf the person
@@ -177,11 +178,11 @@ if not os.path.exists(output_path):
 
 def convert_to_wav(input_file, output_file):
     try:
-        audio = AudioSegment.from_file(input_file)
-        audio.export(output_file, format="wav")
-        st.write(f"Converted {input_file} to {output_file}")
+        audio_clip = AudioFileClip(input_file)
+        audio_clip.write_audiofile(output_file)
+        print(f"Converted {input_file} to {output_file}")
     except Exception as e:
-        st.write(f"An error occurred while converting to WAV: {e}")
+        print(f"An error occurred while converting to WAV: {e}")
 
 def download_audio(video_url, output_path):
     try:
