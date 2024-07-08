@@ -219,9 +219,9 @@ def main1():
     col1, col2 = st.columns([5, 3])
 
     if st.session_state.youtube_link:
-        with col1:
-            video_id = st.session_state.youtube_link.split("=")[1]
-            st.video(f"https://www.youtube.com/watch?v={video_id}", format="video/mp4")
+        # with col1:
+        #     video_id = st.session_state.youtube_link.split("=")[1]
+        #     st.video(f"https://www.youtube.com/watch?v={video_id}", format="video/mp4")
         dur = get_video_duration(st.session_state.youtube_link)
         st.info(dur)
         # interval_minutes = st.slider("Select interval in minutes", min_value=1, max_value=10, value=5, step=1)
@@ -267,9 +267,9 @@ def main2():
     youtube_link = st.text_input("Enter YouTube Video Link:")
     col1, col2 = st.columns([5, 3])
     if youtube_link:
-        with col1:
-          video_id = st.session_state.youtube_link.split("=")[1]
-          st.video(f"https://www.youtube.com/watch?v={video_id}", format="video/mp4")
+        # with col1:
+        #   video_id = st.session_state.youtube_link.split("=")[1]
+        #   st.video(f"https://www.youtube.com/watch?v={video_id}", format="video/mp4")
             # st.video(f"https://www.youtube.com/watch?v={youtube_link.split("=")[1]}", format="video/mp4")
         # Prompt for extracting keywords
         prompt = """From the transcript of the video, identify the 10 core topics/keyterms discussed and get them into a proper Python list []
@@ -308,9 +308,9 @@ def main3():
     youtube_link = st.text_input("Enter YouTube Video Link:")
     col1, col2 = st.columns([5, 3])
     if youtube_link:
-        with col1:
-          video_id = st.session_state.youtube_link.split("=")[1]
-          st.video(f"https://www.youtube.com/watch?v={video_id}", format="video/mp4")
+        # with col1:
+        #   video_id = st.session_state.youtube_link.split("=")[1]
+        #   st.video(f"https://www.youtube.com/watch?v={video_id}", format="video/mp4")
             # st.video(f"https://www.youtube.com/watch?v={youtube_link.split("=")[1]}", format="video/mp4")
         # User query input
         user_query = st.text_area("Enter your query:")
