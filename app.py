@@ -366,7 +366,7 @@ def main4():
     video_url = st.text_input("Enter YouTube video URL:", disabled=st.session_state['video_selected'] or st.session_state['file_uploaded'] or st.session_state['existing_video_selected'])
 
     uploaded_file = st.file_uploader("Or upload an MP4 file", type=["mp4"], disabled=st.session_state['video_selected'] or bool(video_url) or st.session_state['existing_video_selected'])
-    outputt_path = '/content/Untitled Folder' 
+    outputt_path = './Untitled Folder' 
   
     if not os.path.exists(outputt_path):
       os.makedirs(outputt_path)
