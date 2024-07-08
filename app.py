@@ -926,7 +926,7 @@ def main4():
                     st.error("Downloaded file does not exist.")
                     st.stop()
                 else:
-                    st.caption(f"Downloaded file path: {downloaded_file}")
+                    st.info(f"Downloaded file path: {downloaded_file}")
 
                 wav_output_file = os.path.splitext(downloaded_file)[0] + '.wav'
                 convert_to_wav(downloaded_file, wav_output_file)
