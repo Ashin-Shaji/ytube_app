@@ -179,9 +179,9 @@ def convert_to_wav(input_file, output_file):
     try:
         audio = AudioSegment.from_file(input_file)
         audio.export(output_file, format="wav")
-        print(f"Converted {input_file} to {output_file}")
+        st.write(f"Converted {input_file} to {output_file}")
     except Exception as e:
-        print(f"An error occurred while converting to WAV: {e}")
+        st.write(f"An error occurred while converting to WAV: {e}")
 
 def download_audio(video_url, output_path):
     try:
@@ -189,6 +189,7 @@ def download_audio(video_url, output_path):
         video_title = yt.title
         audio_stream = yt.streams.filter(only_audio=True).first()
         downloaded_file = audio_stream.download(output_path=output_path)
+        st.write(f"Audio downloaded successfully to {downloaded_file}")
         return downloaded_file, video_title
     except Exception as e:
         st.error(f"An error occurred: {e}")
@@ -201,13 +202,13 @@ def transcribe_audio(file_path, language='en-US', retries=3):
             with sr.AudioFile(file_path) as source:
                 audio_text = r.record(source)
                 text = r.recognize_google(audio_text, language=language)
-                print("Transcription completed successfully")
+                st.write("Transcription completed successfully")
                 return text
         except sr.UnknownValueError:
-            print("Could not understand audio")
+            st.write("Could not understand audio")
             return ""
         except sr.RequestError as req:
-            print(f"Error fetching results from Google Web Speech API: {req}")
+            st.write(f"Error fetching results from Google Web Speech API: {req}")
             if attempt < retries - 1:
                 time.sleep(2)  # Wait for 2 seconds before retrying
             else:
@@ -560,13 +561,17 @@ def main4():
                 if not os.path.exists(downloaded_file):
                     st.error("Downloaded file does not exist.")
                     st.stop()
+                else:
+                    st.write(f"Downloaded file path: {downloaded_file}")
 
                 wav_output_file = os.path.splitext(downloaded_file)[0] + '.wav'
                 convert_to_wav(downloaded_file, wav_output_file)
 
-                # Check if the WAV file exists
-                if not os.path.exists(wav_output_file):
-                    st.error("Converted WAV file does not exist.")
+                # Debug: Check if the WAV file was created successfully
+                if os.path.exists(wav_output_file):
+                    st.write(f"WAV file path: {wav_output_file}")
+                else:
+                    st.error(f"Converted WAV file does not exist at {wav_output_file}")
                     st.stop()
 
                 text = transcribe_audio(wav_output_file)
@@ -576,6 +581,7 @@ def main4():
                     with open(file_path, "w") as file:
                         file.write(text)
                     st.success("Transcription completed successfully")
+                    st.write(f"Transcription file path: {file_path}")
                     with st.expander("Transcript"):
                         st.markdown(f"#### {video_title}\n\n{text}")
 
