@@ -155,6 +155,7 @@ def download_audio(video_url, output_path):
         return None, None
 
 def transcribe_audio(file_path, language='en-US', retries=3):
+  with st.spinner('Transcribing audio...'):
     r = sr.Recognizer()
     for attempt in range(retries):
         try:
