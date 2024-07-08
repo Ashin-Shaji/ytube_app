@@ -636,7 +636,7 @@ def convert_to_wav(input_file, output_file):
     try:
         audio_clip = AudioFileClip(input_file)
         audio_clip.write_audiofile(output_file)
-        st.caption(f"Converted {input_file} to {output_file}")
+        # st.caption(f"Converted {input_file} to {output_file}")
     except Exception as e:
         st.exception(f"An error occurred while converting to WAV: {e}")
 
