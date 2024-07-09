@@ -925,15 +925,15 @@ def main4():
                 if not os.path.exists(downloaded_file):
                     st.error("Downloaded file does not exist.")
                     st.stop()
-                else:
-                    st.caption(f"Downloaded file path: {downloaded_file}")
+                # else:
+                    # st.caption(f"Downloaded file path: {downloaded_file}")
 
                 wav_output_file = os.path.splitext(downloaded_file)[0] + '.wav'
                 convert_to_wav(downloaded_file, wav_output_file)
 
                 # Debug: Check if the WAV file was created successfully
                 if os.path.exists(wav_output_file):
-                    st.caption(f"WAV file path: {wav_output_file}")
+                    # st.caption(f"WAV file path: {wav_output_file}")
                 else:
                     st.error(f"Converted WAV file does not exist at {wav_output_file}")
                     st.stop()
@@ -945,7 +945,7 @@ def main4():
                     with open(file_path, "w") as file:
                         file.write(text)
                     # st.success("Transcription completed successfully")
-                    st.caption(f"Transcription file path: {file_path}")
+                    # st.caption(f"Transcription file path: {file_path}")
                     with st.expander("Transcript"):
                         st.markdown(f"#### {video_title}\n\n{text}")
 
