@@ -706,8 +706,11 @@ def main1():
 
     if st.session_state.youtube_link:
         with col1:
-            video_id = st.session_state.youtube_link.split("=")[1]
-            st.video(f"https://www.youtube.com/watch?v={video_id}", format="video/mp4")
+            # video_id = st.session_state.youtube_link.split("=")[1]
+            # st.video(f"https://www.youtube.com/watch?v={video_id}", format="video/mp4")
+            video_id = video_url.split("v=")[-1] if "v=" in video_url else video_url.split("/")[-1].split("?")[0]
+            st.video(f"https://www.youtube.com/embed/{video_id}")
+          
         dur = get_video_duration(st.session_state.youtube_link)
         st.info(dur)
         # interval_minutes = st.slider("Select interval in minutes", min_value=1, max_value=10, value=5, step=1)
@@ -761,8 +764,10 @@ def main2():
 
     if youtube_link:
         with col1:
-            video_id = youtube_link.split("=")[1]
-            st.video(f"https://www.youtube.com/watch?v={video_id}", format="video/mp4")
+            # video_id = youtube_link.split("=")[1]
+            # st.video(f"https://www.youtube.com/watch?v={video_id}", format="video/mp4")
+            video_id = video_url.split("v=")[-1] if "v=" in video_url else video_url.split("/")[-1].split("?")[0]
+            st.video(f"https://www.youtube.com/embed/{video_id}")
 
         # Prompt for extracting keywords
         prompt = """From the transcript of the video, identify the 10 core topics/keyterms discussed and get them into a proper Python list []
@@ -820,8 +825,10 @@ def main3():
 
     if youtube_link:
         with col1:
-            video_id = youtube_link.split("=")[1]
-            st.video(f"https://www.youtube.com/watch?v={video_id}", format="video/mp4")
+            # video_id = youtube_link.split("=")[1]
+            # st.video(f"https://www.youtube.com/watch?v={video_id}", format="video/mp4")
+            video_id = video_url.split("v=")[-1] if "v=" in video_url else video_url.split("/")[-1].split("?")[0]
+            st.video(f"https://www.youtube.com/embed/{video_id}")
 
         # User query input
         user_query = st.text_area("Enter your query:")
