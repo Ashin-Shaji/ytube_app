@@ -974,6 +974,7 @@ def main3():
 
 
 # #mp4 -gemini
+gem.configure(api_key='AIzaSyBbepUh8x3CqpkxNFnJ1IX0dFc0UNTwwbU')
 def main4():
     # Streamlit UI
     st.title("YouTube/MP4 Audio Transcriber and Summarizer")
