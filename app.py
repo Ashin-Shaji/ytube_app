@@ -887,7 +887,7 @@ def main2():
             o = gem.GenerativeModel('gemini-pro')
             concise_explanation = o.generate_content(prompt_explanation)
             st.subheader("Concise Explanation:")
-            st.markdown(concise_explanation)
+            st.markdown(concise_explanation.text)
 
 
 #quest answering
