@@ -819,15 +819,22 @@ def main2():
         st.session_state.selected_keywords = []
     if 'gemini_response' not in st.session_state:
         st.session_state.gemini_response = ""
+    if 'previous_youtube_link' not in st.session_state:
+        st.session_state.previous_youtube_link = ""
 
     # Input for YouTube video link
     youtube_link = st.text_input("Enter YouTube Video Link:")
+
+    # Clear selected keywords if a new YouTube link is entered
+    if youtube_link != st.session_state.previous_youtube_link:
+        st.session_state.selected_keywords = []
+        st.session_state.gemini_response = ""
+        st.session_state.previous_youtube_link = youtube_link
+
     col1, col2 = st.columns([5, 3])
 
     if youtube_link:
         with col1:
-            # video_id = youtube_link.split("=")[1]
-            # st.video(f"https://www.youtube.com/watch?v={video_id}", format="video/mp4")
             video_id = youtube_link.split("v=")[-1] if "v=" in youtube_link else youtube_link.split("/")[-1].split("?")[0]
             st.video(f"https://www.youtube.com/embed/{video_id}")
 
@@ -872,11 +879,7 @@ def main2():
             concise_explanation = generate_gemini_content(merged_text, prompt_explanation)
             st.subheader("Concise Explanation:")
             st.markdown(concise_explanation)
-
-        # Add a 'Clear Keys' button to clear the selected keywords
-        if st.button('Clear Keys'):
-            st.session_state.selected_keywords = []
-            st.experimental_rerun() 
+              
 
 #quest answering
 def main3():
