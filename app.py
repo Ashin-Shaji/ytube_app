@@ -748,7 +748,7 @@ def main1():
                 except Exception as e:
                     st.exception(f"Failed to extract transcript: {e}")
 
-# keyword extractor - using
+# keyword extractor -palm
 # def main2():
 #     st.title("YouTube Video Keyword Content Analyzer")
 
@@ -818,6 +818,7 @@ def main1():
 #             st.subheader("Concise Explanation:")
 #             st.markdown(concise_explanation)
 
+#gemini
 def main2():
     st.title("YouTube Video Keyword Content Analyzer")
 
