@@ -946,7 +946,7 @@ def main3():
             res = o.generate_content(f"""You are an assistant who can analyze video transcript and answer user query: '{user_query}' in 100 words,
         based on the transcript of the video :{merged_text}, you will never generate random/creative/not genuine responses on your own,
         never talk out of the context.""").text
-            st.markdown(f"**{res}**")
+            st.markdown(res)
 
 #mp4 - palm
 # def main4():
