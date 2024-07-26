@@ -870,7 +870,7 @@ def main2():
         if not st.session_state.gemini_response:
             # st.session_state.gemini_response = generate_gemini_content(merged_text, prompt)
             o = gem.GenerativeModel('gemini-1.5-pro-latest')
-            st.session_state.gemini_response = o.generate_content(f"""From the transcript of the video :{input()}, identify the 10 core topics/keyterms 
+            st.session_state.gemini_response = o.generate_content(f"""From the transcript of the video :{merged_text}, identify the 10 core topics/keyterms 
             discussed and get them into a proper clean pure Python list separated by commas,your response shall not contain
             things like ```python and ``` but shall have [].""").text
               
