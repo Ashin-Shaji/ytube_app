@@ -590,7 +590,7 @@ def merge_transcript(transcript, interval_minutes=.5):
         return merged_transcript
 
     except Exception as e:
-        st.error(f"Error: {e}")
+        st.error(f"Error: Unable to continue transcript process")
         return None
 
 def generate_gemini_content(transcript_text, prompt, max_output_tokens=None):
