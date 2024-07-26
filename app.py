@@ -852,8 +852,8 @@ def main2():
             st.video(f"https://www.youtube.com/embed/{video_id}")
 
         # Prompt for extracting keywords
-        prompt = """From the transcript of the video, identify the 10 core topics/keyterms discussed and get them into a proper Python list []
-        separated by commas. Note that the transcript may contain grammatical/wording errors. Never get meaningless words."""
+        # prompt = """From the transcript of the video, identify the 10 core topics/keyterms discussed and get them into a proper Python list []
+        # separated by commas. Note that the transcript may contain grammatical/wording errors. Never get meaningless words."""
 
         # Extract transcript using your actual function (replace with extract_transcript)
         transcript = extract_transcript_details(youtube_link)
