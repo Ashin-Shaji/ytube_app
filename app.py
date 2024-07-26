@@ -552,7 +552,7 @@ def extract_transcript_details(youtube_video_url):
         return None
       
 # Function to merge transcript
-def merge_transcript(transcript, interval_minutes=5):
+def merge_transcript(transcript, interval_minutes=.5):
     try:
         # Initialize variables
         interval = timedelta(minutes=interval_minutes)
