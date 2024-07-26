@@ -823,92 +823,17 @@ def main1():
 #             st.subheader("Concise Explanation:")
 #             st.markdown(concise_explanation)
 
-# #gemini
-# def main2():
-#     st.title("YouTube Video Keyword Content Analyzer")
-
-#     # Initialize session state variables
-#     if 'selected_keywords' not in st.session_state:
-#         st.session_state.selected_keywords = []
-#     if 'gemini_response' not in st.session_state:
-#         st.session_state.gemini_response = ""
-#     if 'previous_youtube_link' not in st.session_state:
-#         st.session_state.previous_youtube_link = ""
-
-#     # Input for YouTube video link
-#     youtube_link = st.text_input("Enter YouTube Video Link:")
-
-#     # Clear selected keywords if a new YouTube link is entered
-#     if youtube_link != st.session_state.previous_youtube_link:
-#         st.session_state.selected_keywords = []
-#         st.session_state.gemini_response = ""
-#         st.session_state.previous_youtube_link = youtube_link
-
-#     col1, col2 = st.columns([5, 3])
-
-#     if youtube_link:
-#         with col1:
-#             video_id = youtube_link.split("v=")[-1] if "v=" in youtube_link else youtube_link.split("/")[-1].split("?")[0]
-#             st.video(f"https://www.youtube.com/embed/{video_id}")
-
-#         # Prompt for extracting keywords
-#         # prompt = """From the transcript of the video, identify the 10 core topics/keyterms discussed and get them into a proper Python list []
-#         # separated by commas. Note that the transcript may contain grammatical/wording errors. Never get meaningless words."""
-
-#         # Extract transcript using your actual function (replace with extract_transcript)
-#         transcript = extract_transcript_details(youtube_link)
-
-#         # Merge transcripts into a single transcript using merge_transcript
-#         merged_transcript = merge_transcript(transcript, interval_minutes=5)
-
-#         # Create a text transcript
-#         merged_text = ""
-#         for timestamp, text in merged_transcript.items():
-#             merged_text += f"{timestamp}: {text}\n"
-
-#         # Generate content based on the transcript (replace with your function)
-#         if not st.session_state.gemini_response:
-#             # st.session_state.gemini_response = generate_gemini_content(merged_text, prompt)
-#             o = gem.GenerativeModel('gemini-1.5-pro-latest')
-#             st.session_state.gemini_response = o.generate_content(f"""From the transcript of the video :{merged_text}, identify the 10 core topics/keyterms 
-#             discussed and get them into a proper clean pure Python list separated by commas,your response shall not contain
-#             things like ```python and ``` but shall have [].""").text
-              
-#         with st.expander('Show Transcript'):
-#             st.markdown(merged_text)
-
-#         # Convert the result to a Python list
-#         my_list = ast.literal_eval(st.session_state.gemini_response)
-
-#         # Display multiselect box
-#         options = st.multiselect("Select keywords", my_list, default=st.session_state.selected_keywords)
-#         st.write("You selected:", options)
-
-#         # Update session state with selected keywords
-#         st.session_state.selected_keywords = options
-
-#         # if options:
-#         #     # Prompt for concise explanation
-#         #     prompt_explanation = f"""You are an assistant who can analyze the following YouTube video transcript: {merged_text}
-#         #     and provide a summary of what the transcript says about the following keywords: {options}. Note that you should provide the
-#         #     answers based on the transcript only."""
-#         #     # Generate content for the explanation using the provided gem.GenerativeModel implementation
-#         #     o = gem.GenerativeModel('gemini-1.5-pro-latest')
-#         #     concise_explanation = o.generate_content(prompt_explanation)
-#         #     st.subheader("Concise Explanation:")
-#         #     st.markdown(concise_explanation.text)
-          
-
+#gemini
 def main2():
     st.title("YouTube Video Keyword Content Analyzer")
 
     # Initialize session state variables
     if 'selected_keywords' not in st.session_state:
         st.session_state.selected_keywords = []
+    if 'gemini_response' not in st.session_state:
+        st.session_state.gemini_response = ""
     if 'previous_youtube_link' not in st.session_state:
         st.session_state.previous_youtube_link = ""
-    if 'current_keyword_index' not in st.session_state:
-        st.session_state.current_keyword_index = 0
 
     # Input for YouTube video link
     youtube_link = st.text_input("Enter YouTube Video Link:")
@@ -916,8 +841,8 @@ def main2():
     # Clear selected keywords if a new YouTube link is entered
     if youtube_link != st.session_state.previous_youtube_link:
         st.session_state.selected_keywords = []
+        st.session_state.gemini_response = ""
         st.session_state.previous_youtube_link = youtube_link
-        st.session_state.current_keyword_index = 0
 
     col1, col2 = st.columns([5, 3])
 
@@ -925,6 +850,10 @@ def main2():
         with col1:
             video_id = youtube_link.split("v=")[-1] if "v=" in youtube_link else youtube_link.split("/")[-1].split("?")[0]
             st.video(f"https://www.youtube.com/embed/{video_id}")
+
+        # Prompt for extracting keywords
+        # prompt = """From the transcript of the video, identify the 10 core topics/keyterms discussed and get them into a proper Python list []
+        # separated by commas. Note that the transcript may contain grammatical/wording errors. Never get meaningless words."""
 
         # Extract transcript using your actual function (replace with extract_transcript)
         transcript = extract_transcript_details(youtube_link)
@@ -938,18 +867,18 @@ def main2():
             merged_text += f"{timestamp}: {text}\n"
 
         # Generate content based on the transcript (replace with your function)
-        if 'keyword_list' not in st.session_state:
+        if not st.session_state.gemini_response:
+            # st.session_state.gemini_response = generate_gemini_content(merged_text, prompt)
             o = gem.GenerativeModel('gemini-1.5-pro-latest')
-            gemini_response = o.generate_content(f"""From the transcript of the video :{merged_text}, identify the 10 core topics/keyterms 
-            discussed and get them into a proper clean pure Python list separated by commas, your response shall not contain things like 
-            'python' and 'but' shall have [].""").text
-            st.session_state.keyword_list = ast.literal_eval(gemini_response)
-
+            st.session_state.gemini_response = o.generate_content(f"""From the transcript of the video :{merged_text}, identify the 10 core topics/keyterms 
+            discussed and get them into a proper clean pure Python list separated by commas,your response shall not contain
+            things like ```python and ``` but shall have [].""").text
+              
         with st.expander('Show Transcript'):
             st.markdown(merged_text)
 
         # Convert the result to a Python list
-        my_list = list(st.session_state.keyword_list)
+        my_list = ast.literal_eval(st.session_state.gemini_response)
 
         # Display multiselect box
         options = st.multiselect("Select keywords", my_list, default=st.session_state.selected_keywords)
@@ -958,28 +887,18 @@ def main2():
         # Update session state with selected keywords
         st.session_state.selected_keywords = options
 
-        # Process one keyword at a time
-        if st.session_state.selected_keywords:
-            current_index = st.session_state.current_keyword_index
-            if current_index < len(st.session_state.selected_keywords):
-                current_keyword = st.session_state.selected_keywords[current_index]
-                # Prompt for concise explanation
-                prompt_explanation = f"""You are an assistant who can analyze the following YouTube video transcript: {merged_text}
-                and provide a summary of what the transcript says about the following keyword: {current_keyword}. Note that you should provide the
-                answers based on the transcript only."""
-                try:
-                    # Generate content for the explanation using the provided gem.GenerativeModel implementation
-                    o = gem.GenerativeModel('gemini-1.5-pro-latest')
-                    concise_explanation = o.generate_content(prompt_explanation)
-                    st.subheader(f"Explanation for {current_keyword}:")
-                    st.markdown(concise_explanation.text)
-                except Exception as e:
-                    st.error(f"An error occurred while generating the response for keyword '{current_keyword}': {e}")
-
-                if st.button("Process Next Keyword"):
-                    st.session_state.current_keyword_index += 1
+        # if options:
+        #     # Prompt for concise explanation
+        #     prompt_explanation = f"""You are an assistant who can analyze the following YouTube video transcript: {merged_text}
+        #     and provide a summary of what the transcript says about the following keywords: {options}. Note that you should provide the
+        #     answers based on the transcript only."""
+        #     # Generate content for the explanation using the provided gem.GenerativeModel implementation
+        #     o = gem.GenerativeModel('gemini-1.5-pro-latest')
+        #     concise_explanation = o.generate_content(prompt_explanation)
+        #     st.subheader("Concise Explanation:")
+        #     st.markdown(concise_explanation.text)
+      
                       
-
 #quest answering
 def main3():
     st.title("YouTube Video Question Answering")
