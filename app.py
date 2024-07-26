@@ -898,16 +898,6 @@ def main1():
 #         #     st.subheader("Concise Explanation:")
 #         #     st.markdown(concise_explanation.text)
           
-#         if options:
-#               for i in options:
-#                     prompt_explanation = f"""You are an assistant who can analyze the following YouTube video transcript: {merged_text}
-#                     and provide a summary of what the transcript says about the following keyword: {i} in 50 words. Note that you should provide the
-#                     answers based on the transcript only."""
-#                     o = gem.GenerativeModel('gemini-1.5-pro-latest')
-#                     concise_explanation = o.generate_content(prompt_explanation)
-#                     st.subheader("Concise Explanation:")
-#                     st.markdown(concise_explanation.text)
-
 
 def main2():
     st.title("YouTube Video Keyword Content Analyzer")
@@ -952,10 +942,10 @@ def main2():
 
         # Generate content based on the transcript (replace with your function)
         if not st.session_state.gemini_response:
-            gemini_prompt = f"""From the transcript of the video :{merged_text}, identify the 10 core topics/keyterms 
+            o = gem.GenerativeModel('gemini-1.5-pro-latest')
+            st.session_state.gemini_response = o.generate_content(f"""From the transcript of the video :{merged_text}, identify the 10 core topics/keyterms 
             discussed and get them into a proper clean pure Python list separated by commas,your response shall not contain
-            things like ```python and ``` but shall have []."""
-            st.session_state.gemini_response = generate_gemini_content(gemini_prompt)
+            things like ```python and ``` but shall have [].""").text
               
         with st.expander('Show Transcript'):
             st.markdown(merged_text)
@@ -976,7 +966,10 @@ def main2():
                     prompt_explanation = f"""You are an assistant who can analyze the following YouTube video transcript: {merged_text}
                     and provide a summary of what the transcript says about the following keyword: {kwrd} in 50 words. Note that you should provide the
                     answers based on the transcript only."""
-                    st.session_state.keyword_explanations[kwrd] = generate_gemini_content(prompt_explanation)
+                    o = gem.GenerativeModel('gemini-1.5-pro-latest')
+                    st.session_state.keyword_explanations[kwrd] = o.generate_content(prompt_explanation).text
+                    # st.subheader("Concise Explanation:")
+                    # st.markdown(concise_explanation.text)
                 
                 st.subheader(f"Concise Explanation for '{kwrd}':")
                 st.markdown(st.session_state.keyword_explanations[kwrd])
