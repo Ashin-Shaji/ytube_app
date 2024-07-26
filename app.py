@@ -885,7 +885,7 @@ def main2():
             and provide a summary of what the transcript says about the following keywords: {options} in 250 words. Note that you should provide the
             answers based on the transcript only."""
             # Generate content for the explanation using the provided gem.GenerativeModel implementation
-            o = gem.GenerativeModel('gemini-pro')
+            o = gem.GenerativeModel('gemini-1.5-pro-latest')
             concise_explanation = o.generate_content(prompt_explanation)
             st.subheader("Concise Explanation:")
             st.markdown(concise_explanation.text)
@@ -1156,7 +1156,7 @@ def main4():
                         st.markdown(f"#### {video_title}\n\n{text}")
 
                     try:
-                        o = gem.GenerativeModel('gemini-pro')
+                        o = gem.GenerativeModel('gemini-1.5-pro-latest')
                         summary = o.generate_content(f"""You are a YouTube transcript summarizer. You will take youtube video 
                         transcript and provide summary about major points discussed within 250 words. 
                         Never mention the name of the person, here is the transcript:{text}""")
