@@ -548,7 +548,7 @@ def extract_transcript_details(youtube_video_url):
         return transcript_dict
 
     except Exception as e:
-        st.error("Error: No Transcript found", icon = '❕')
+        st.error("No Transcript found", icon = '❕')
         return None
       
 # Function to merge transcript
@@ -590,7 +590,7 @@ def merge_transcript(transcript, interval_minutes=.5):
         return merged_transcript
 
     except Exception as e:
-        st.error(f"Error: Unable to continue transcript process")
+        st.error(f"Unable to continue transcript process")
         return None
 
 def generate_gemini_content(transcript_text, prompt, max_output_tokens=None):
