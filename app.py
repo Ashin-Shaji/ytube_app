@@ -909,8 +909,6 @@ def main2():
         st.session_state.gemini_response = {}
     if 'previous_youtube_link' not in st.session_state:
         st.session_state.previous_youtube_link = ""
-    if 'keyword_explanations' not in st.session_state:
-        st.session_state.keyword_explanations = {}
 
     # Input for YouTube video link
     youtube_link = st.text_input("Enter YouTube Video Link:")
@@ -920,14 +918,16 @@ def main2():
         st.session_state.selected_keywords = []
         st.session_state.gemini_response = {}
         st.session_state.previous_youtube_link = youtube_link
-        st.session_state.keyword_explanations = {}
 
     col1, col2 = st.columns([5, 3])
 
     if youtube_link:
         with col1:
             video_id = youtube_link.split("v=")[-1] if "v=" in youtube_link else youtube_link.split("/")[-1].split("?")[0]
-            st.video(f"https://www.youtube.com/embed/{video_id}")
+            st.video(f"(link unavailable)")
+
+        # Prompt for extracting keywords
+        prompt = """From the transcript of the video, identify the 10 core topics/keyterms discussed and get them into a proper Python list [] separated by commas. Note that the transcript may contain grammatical/wording errors. Never get meaningless words."""
 
         # Extract transcript using your actual function (replace with extract_transcript)
         transcript = extract_transcript_details(youtube_link)
@@ -943,15 +943,15 @@ def main2():
         # Generate content based on the transcript (replace with your function)
         if not st.session_state.gemini_response:
             o = gem.GenerativeModel('gemini-1.5-pro-latest')
-            st.session_state.gemini_response = o.generate_content(f"""From the transcript of the video :{merged_text}, identify the 10 core topics/keyterms 
-            discussed and get them into a proper clean pure Python list separated by commas,your response shall not contain
-            things like ```python and ``` but shall have [].""").text
-              
+            st.session_state.gemini_response['keywords'] = o.generate_content(f"""From the transcript of the video :{merged_text},
+            identify the 10 core topics/keyterms discussed and get them into a proper clean pure Python list separated by commas,your 
+            response shall not contain things like python and but shall have [].""").text
+
         with st.expander('Show Transcript'):
             st.markdown(merged_text)
 
         # Convert the result to a Python list
-        my_list = ast.literal_eval(st.session_state.gemini_response)
+        my_list = ast.literal_eval(st.session_state.gemini_response['keywords'])
 
         # Display multiselect box
         options = st.multiselect("Select keywords", my_list, default=st.session_state.selected_keywords)
@@ -962,17 +962,16 @@ def main2():
 
         if options:
             for kwrd in options:
-                if kwrd not in st.session_state.keyword_explanations:
-                    prompt_explanation = f"""You are an assistant who can analyze the following YouTube video transcript: {merged_text}
-                    and provide a summary of what the transcript says about the following keyword: {kwrd} in 50 words. Note that you should provide the
-                    answers based on the transcript only."""
+                if kwrd not in st.session_state.gemini_response or st.session_state.gemini_response[kwrd] == '':
+                    prompt_explanation = f"""You are an assistant who can analyze the following YouTube video transcript: {merged_text} 
+                    and provide a summary of what the transcript says about the following keyword: {kwrd} in 50 words. Note that you 
+                    should provide the answers based on the transcript only."""
                     o = gem.GenerativeModel('gemini-1.5-pro-latest')
-                    st.session_state.keyword_explanations[kwrd] = o.generate_content(prompt_explanation).text
-                    # st.subheader("Concise Explanation:")
-                    # st.markdown(concise_explanation.text)
-                
+                    concise_explanation = o.generate_content(prompt_explanation)
+                    st.session_state.gemini_response[kwrd] = concise_explanation.text
                 st.subheader(f"Concise Explanation for '{kwrd}':")
-                st.markdown(st.session_state.keyword_explanations[kwrd])
+                st.markdown(st.session_state.gemini_response[kwrd])
+
 
 
 #quest answering
