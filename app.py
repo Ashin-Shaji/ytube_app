@@ -901,7 +901,7 @@ def main2():
         if options:
               for i in options:
                     prompt_explanation = f"""You are an assistant who can analyze the following YouTube video transcript: {merged_text}
-                    and provide a summary of what the transcript says about the following keywords: {i}. Note that you should provide the
+                    and provide a summary of what the transcript says about the following keyword: {i} in 50 words. Note that you should provide the
                     answers based on the transcript only."""
                     o = gem.GenerativeModel('gemini-1.5-pro-latest')
                     concise_explanation = o.generate_content(prompt_explanation)
