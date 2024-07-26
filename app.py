@@ -905,8 +905,6 @@ def main2():
     # Initialize session state variables
     if 'selected_keywords' not in st.session_state:
         st.session_state.selected_keywords = []
-    if 'gemini_responses' not in st.session_state:
-        st.session_state.gemini_responses = {}
     if 'previous_youtube_link' not in st.session_state:
         st.session_state.previous_youtube_link = ""
     if 'current_keyword_index' not in st.session_state:
@@ -918,7 +916,6 @@ def main2():
     # Clear selected keywords if a new YouTube link is entered
     if youtube_link != st.session_state.previous_youtube_link:
         st.session_state.selected_keywords = []
-        st.session_state.gemini_responses = {}
         st.session_state.previous_youtube_link = youtube_link
         st.session_state.current_keyword_index = 0
 
@@ -941,20 +938,18 @@ def main2():
             merged_text += f"{timestamp}: {text}\n"
 
         # Generate content based on the transcript (replace with your function)
-        if not st.session_state.gemini_responses:
+        if 'keyword_list' not in st.session_state:
             o = gem.GenerativeModel('gemini-1.5-pro-latest')
             gemini_response = o.generate_content(f"""From the transcript of the video :{merged_text}, identify the 10 core topics/keyterms 
             discussed and get them into a proper clean pure Python list separated by commas, your response shall not contain things like 
             'python' and 'but' shall have [].""").text
-            keyword_list = ast.literal_eval(gemini_response)
-            for keyword in keyword_list:
-                st.session_state.gemini_responses[keyword] = None
+            st.session_state.keyword_list = ast.literal_eval(gemini_response)
 
         with st.expander('Show Transcript'):
             st.markdown(merged_text)
 
         # Convert the result to a Python list
-        my_list = list(st.session_state.gemini_responses.keys())
+        my_list = list(st.session_state.keyword_list)
 
         # Display multiselect box
         options = st.multiselect("Select keywords", my_list, default=st.session_state.selected_keywords)
@@ -968,22 +963,18 @@ def main2():
             current_index = st.session_state.current_keyword_index
             if current_index < len(st.session_state.selected_keywords):
                 current_keyword = st.session_state.selected_keywords[current_index]
-                if st.session_state.gemini_responses[current_keyword] is None:
-                    try:
-                        # Prompt for concise explanation
-                        prompt_explanation = f"""You are an assistant who can analyze the following YouTube video transcript: {merged_text}
-                        and provide a summary of what the transcript says about the following keyword: {current_keyword}. Note that you should provide the
-                        answers based on the transcript only."""
-                        # Generate content for the explanation using the provided gem.GenerativeModel implementation
-                        o = gem.GenerativeModel('gemini-1.5-pro-latest')
-                        concise_explanation = o.generate_content(prompt_explanation)
-                        st.session_state.gemini_responses[current_keyword] = concise_explanation.text
-                    except Exception as e:
-                        st.error(f"An error occurred while generating the response for keyword '{current_keyword}': {e}")
-                        st.session_state.gemini_responses[current_keyword] = "Error generating response"
-
-                st.subheader(f"Explanation for {current_keyword}:")
-                st.markdown(st.session_state.gemini_responses[current_keyword])
+                # Prompt for concise explanation
+                prompt_explanation = f"""You are an assistant who can analyze the following YouTube video transcript: {merged_text}
+                and provide a summary of what the transcript says about the following keyword: {current_keyword}. Note that you should provide the
+                answers based on the transcript only."""
+                try:
+                    # Generate content for the explanation using the provided gem.GenerativeModel implementation
+                    o = gem.GenerativeModel('gemini-1.5-pro-latest')
+                    concise_explanation = o.generate_content(prompt_explanation)
+                    st.subheader(f"Explanation for {current_keyword}:")
+                    st.markdown(concise_explanation.text)
+                except Exception as e:
+                    st.error(f"An error occurred while generating the response for keyword '{current_keyword}': {e}")
 
                 if st.button("Process Next Keyword"):
                     st.session_state.current_keyword_index += 1
