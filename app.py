@@ -969,14 +969,18 @@ def main2():
             if current_index < len(st.session_state.selected_keywords):
                 current_keyword = st.session_state.selected_keywords[current_index]
                 if st.session_state.gemini_responses[current_keyword] is None:
-                    # Prompt for concise explanation
-                    prompt_explanation = f"""You are an assistant who can analyze the following YouTube video transcript: {merged_text}
-                    and provide a summary of what the transcript says about the following keyword: {current_keyword}. Note that you should provide the
-                    answers based on the transcript only."""
-                    # Generate content for the explanation using the provided gem.GenerativeModel implementation
-                    o = gem.GenerativeModel('gemini-1.5-pro-latest')
-                    concise_explanation = o.generate_content(prompt_explanation)
-                    st.session_state.gemini_responses[current_keyword] = concise_explanation.text
+                    try:
+                        # Prompt for concise explanation
+                        prompt_explanation = f"""You are an assistant who can analyze the following YouTube video transcript: {merged_text}
+                        and provide a summary of what the transcript says about the following keyword: {current_keyword}. Note that you should provide the
+                        answers based on the transcript only."""
+                        # Generate content for the explanation using the provided gem.GenerativeModel implementation
+                        o = gem.GenerativeModel('gemini-1.5-pro-latest')
+                        concise_explanation = o.generate_content(prompt_explanation)
+                        st.session_state.gemini_responses[current_keyword] = concise_explanation.text
+                    except Exception as e:
+                        st.error(f"An error occurred while generating the response for keyword '{current_keyword}': {e}")
+                        st.session_state.gemini_responses[current_keyword] = "Error generating response"
 
                 st.subheader(f"Explanation for {current_keyword}:")
                 st.markdown(st.session_state.gemini_responses[current_keyword])
