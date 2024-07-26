@@ -745,7 +745,7 @@ def main1():
                     within 300 words in following format. Please provide the summary of the text given here:{merged_text}""")
                                     st.markdown('## **Summary**')
                                     # st.write(res)
-                                    st.write(explanation)
+                                    st.write(explanation.text)
                                 except:
                                     st.exception('Failed to get summary')
                         except Exception as e:
