@@ -871,7 +871,7 @@ def main2():
             # st.session_state.gemini_response = generate_gemini_content(merged_text, prompt)
             o = gem.GenerativeModel('gemini-1.5-pro-latest')
             st.session_state.gemini_response = o.generate_content(f"""From the transcript of the video :{merged_text}, identify the 10 core topics/keyterms 
-            discussed and get them into a proper clean Python list [] separated by commas. Note that the transcript may contain grammatical/wording errors.
+            discussed and get them into a proper clean pure Python list [] separated by commas. Note that the transcript may contain grammatical/wording errors.
             Never get meaningless words.""").text
               
         with st.expander('Show Transcript'):
