@@ -922,9 +922,9 @@ def main3():
         user_query = st.text_area("Enter your query:")
 
         # Prompt for extracting keywords
-        prompt = f"""You are an assistant who can analyze video transcript and answer user query: '{user_query}' in 50 words,
-        based on the transcript of the video, you will never generate random/creative/not genuine responses on your own,
-        never talk out of the context."""
+        # prompt = f"""You are an assistant who can analyze video transcript and answer user query: '{user_query}' in 50 words,
+        # based on the transcript of the video, you will never generate random/creative/not genuine responses on your own,
+        # never talk out of the context."""
 
         # Extract transcript using your actual function (replace with extract_transcript)
         transcript = extract_transcript_details(youtube_link)
@@ -939,8 +939,13 @@ def main3():
 
         # Generate content based on the transcript and user query (replace with your function)
         if user_query:
-            res = generate_gemini_content(merged_text, prompt, max_output_tokens=240)
+            # res = generate_gemini_content(merged_text, prompt, max_output_tokens=240)
             st.subheader("Generated Response:")
+            # st.markdown(f"**{res}**")
+            o = gem.GenerativeModel('gemini-1.5-pro-latest')
+            res = o.generate_content(f"""You are an assistant who can analyze video transcript and answer user query: '{user_query}' in 100 words,
+        based on the transcript of the video :{merged_text}, you will never generate random/creative/not genuine responses on your own,
+        never talk out of the context.""").text
             st.markdown(f"**{res}**")
 
 #mp4 - palm
