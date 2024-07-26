@@ -887,6 +887,7 @@ def main2():
         # Update session state with selected keywords
         st.session_state.selected_keywords = options
 
+        # gemini 1.5 
         # if options:
         #     # Prompt for concise explanation
         #     prompt_explanation = f"""You are an assistant who can analyze the following YouTube video transcript: {merged_text}
@@ -898,6 +899,7 @@ def main2():
         #     st.subheader("Concise Explanation:")
         #     st.markdown(concise_explanation.text)
 
+        # txt bison  
         if options:
             # Prompt for concise explanation
             prompt_explanation = f"""You are an assistant who can analyze the following YouTube video transcript: {merged_text}
