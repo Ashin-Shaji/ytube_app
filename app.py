@@ -887,16 +887,26 @@ def main2():
         # Update session state with selected keywords
         st.session_state.selected_keywords = options
 
+        # if options:
+        #     # Prompt for concise explanation
+        #     prompt_explanation = f"""You are an assistant who can analyze the following YouTube video transcript: {merged_text}
+        #     and provide a summary of what the transcript says about the following keywords: {options}. Note that you should provide the
+        #     answers based on the transcript only."""
+        #     # Generate content for the explanation using the provided gem.GenerativeModel implementation
+        #     o = gem.GenerativeModel('gemini-1.5-pro-latest')
+        #     concise_explanation = o.generate_content(prompt_explanation)
+        #     st.subheader("Concise Explanation:")
+        #     st.markdown(concise_explanation.text)
+          
         if options:
-            # Prompt for concise explanation
-            prompt_explanation = f"""You are an assistant who can analyze the following YouTube video transcript: {merged_text}
-            and provide a summary of what the transcript says about the following keywords: {options}. Note that you should provide the
-            answers based on the transcript only."""
-            # Generate content for the explanation using the provided gem.GenerativeModel implementation
-            o = gem.GenerativeModel('gemini-1.5-pro-latest')
-            concise_explanation = o.generate_content(prompt_explanation)
-            st.subheader("Concise Explanation:")
-            st.markdown(concise_explanation.text)
+              for i in options:
+                    prompt_explanation = f"""You are an assistant who can analyze the following YouTube video transcript: {merged_text}
+                    and provide a summary of what the transcript says about the following keywords: {i}. Note that you should provide the
+                    answers based on the transcript only."""
+                    o = gem.GenerativeModel('gemini-1.5-pro-latest')
+                    concise_explanation = o.generate_content(prompt_explanation)
+                    st.subheader("Concise Explanation:")
+                    st.markdown(concise_explanation.text)
 
 
 #quest answering
