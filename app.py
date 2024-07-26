@@ -738,9 +738,14 @@ def main1():
                                         if st.session_state.show_transcript:
                                             st.write(st.session_state.merged_text)
                                 try:
-                                    res = generate_gemini_content(str(merged_text),prompt)
+                                    # res = generate_gemini_content(str(merged_text),prompt)
+                                    o = gem.GenerativeModel('gemini-1.5-pro-latest')
+                                    explanation = o.generate_content(f"""You are Youtube video summarizer. You will be taking the transcript text and summarizing
+                                    the entire video and providing the overall summary get the major points discussed,never mention the name odf the person
+                    within 300 words in following format. Please provide the summary of the text given here:{merged_text}""")
                                     st.markdown('## **Summary**')
-                                    st.write(res)
+                                    # st.write(res)
+                                    st.write(explanation)
                                 except:
                                     st.exception('Failed to get summary')
                         except Exception as e:
