@@ -548,7 +548,7 @@ def extract_transcript_details(youtube_video_url):
         return transcript_dict
 
     except Exception as e:
-        st.error(f"Error: {e}")
+        st.error("Error: No Transcript found", icon = ❕)
         return None
       
 # Function to merge transcript
