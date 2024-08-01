@@ -503,6 +503,33 @@ from pytube import YouTube
 import time
 from moviepy.editor import AudioFileClip
 gem.configure(api_key='AIzaSyBbepUh8x3CqpkxNFnJ1IX0dFc0UNTwwbU')
+
+# Custom CSS to display radio options
+st.markdown("""
+    <style>
+    div[role="radiogroup"] > label > div {
+        display: flex;
+        flex-direction: row;
+    }
+    div[role="radiogroup"] > label > div > div {
+        margin-right: 10px;
+    }
+    </style>
+    <style>
+    div[role="radiogroup"] {
+        display: flex;
+        flex-direction: row;
+    }
+    div[role="radiogroup"] > label {
+        margin-right: 20px;
+    }
+    input[type="radio"]:div {
+        background-color: white;
+        border-color: lightblue;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
 prompt="""You are Youtube video summarizer. You will be taking the transcript text and summarizing the entire video and providing
                     the overall summary get the major points discussed,never mention the name odf the person
                     within 300 words in following format. Please provide the summary of the text given here:"""
