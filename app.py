@@ -502,7 +502,7 @@ from youtube_transcript_api import YouTubeTranscriptApi
 from pytube import YouTube
 import time
 from moviepy.editor import AudioFileClip
-gem.configure(api_key='AIzaSyBbepUh8x3CqpkxNFnJ1IX0dFc0UNTwwbU')
+gem.configure(api_key='')
 
 # Custom CSS to display radio options
 st.markdown("""
