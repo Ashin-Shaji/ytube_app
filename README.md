@@ -1,12 +1,12 @@
-# YouTube Video Analysis Toolkit
+# 📺 YouTube Intelligence & Analysis Toolkit
 
-This application is a high-performance intelligence suite designed to extract, process, and analyze video data using **Large Language Models (LLMs)** and **Automatic Speech Recognition (ASR)**. It transforms unstructured video content into structured, actionable insights.
+An advanced **Multimodal Analysis** suite that transforms passive YouTube consumption into an interactive data-mining environment. Powered by **Gemini Pro** and **Google Web Speech ASR**, this tool provides high-fidelity summarization, semantic keyword mapping, and context-grounded Q&A.
 
 ---
 
-## ## Architecture Diagram
+## 🏗️ System Architecture
 
-The following Mermaid diagram illustrates the data flow and component interaction within the system.
+The application follows a **Modular Intelligence Pipeline**, separating raw data ingestion from cognitive reasoning layers to ensure low latency and high factual accuracy.
 
 ```mermaid
 graph TD
@@ -38,41 +38,51 @@ graph TD
     UI -->|Summaries/QA/Keywords| User
 ```
 
----
+### 1. Multimodal Acquisition Layer
+* **Transcript Engine:** Interfaces with `youtube-transcript-api` for lightning-fast retrieval of pre-existing English captions.
+* **ASR Pipeline:** For videos without captions or local MP4s, the system utilizes `MoviePy` to extract audio, converting it to **16-bit Mono WAV** before passing it to the Google Web Speech API for synthetic transcription.
 
-## ## System Overview
+### 2. Cognitive Orchestration Layer
+* **Sliding Window Merger:** Unlike raw text dumps, this layer uses `datetime` objects to cluster transcript fragments into 4-minute semantic blocks, preserving chronological context.
+* **Context Grounding:** The Gemini inference engine is restricted via system prompts to use *only* the provided transcript, effectively eliminating AI hallucinations.
 
-### **1. Acquisition & Extraction Layer**
-The system employs a dual-pathway strategy for data ingestion:
-* **The Metadata Path:** Uses `pytube` and `youtube_transcript_api` to fetch pre-existing English captions. This is the "fast-track" and consumes minimal compute.
-* **The Media Path:** If a video lacks captions or is a local file, the system triggers a heavy-processing pipeline. `MoviePy` transcodes the video into a specialized WAV format (Pulse-Code Modulation) to maximize accuracy for the speech recognition algorithms.
-
-### **2. The "Sliding Window" Text Processor**
-Raw transcripts are often disorganized and lack context. This architecture implements a **Time-Interval Merger**:
-* It clusters transcript fragments into specific time windows (e.g., 4-minute blocks).
-* It preserves `HH:MM:SS` timestamps, allowing the AI to "index" where specific topics occur.
-* It sanitizes the text using Regex to remove non-narrative artifacts (closed-captioning cues, music tags, etc.).
-
-### **3. The Intelligence Engine (Gemini Pro)**
-The core "brain" of the application utilizes the `text-bison` model. The architecture treats the transcript as a **Vectorized Context Window**:
-* **Summarization Logic:** Uses a constrained prompt to synthesize major points while adhering to strict word limits.
-* **Keyword Extraction:** Performs an entity extraction pass to find high-value technical terms, which are then returned as a Python-executable list.
-* **Context-Grounded Q&A:** Implements a strict "Context-Only" rule. The prompt prevents the LLM from using its internal training data to answer, forcing it to rely only on the provided transcript to eliminate hallucinations.
-
-
-
-### **4. State-Persistent UI Layer**
-Built on Streamlit, the presentation layer manages **Session State**. This ensures that once a transcript is processed or a summary is generated, the data is cached in the browser's memory. Users can switch between the "Summarizer," "Keyword Analyzer," and "Q&A" modules without re-triggering expensive API calls or re-processing the video.
+### 3. State Management & UI
+* **Session Persistence:** Utilizes Streamlit's `session_state` to cache heavy AI computations, allowing users to toggle between summary, keywords, and Q&A views without re-triggering API costs.
+* **Temporary Vault:** Uses a controlled `/tmp/` directory for audio transcoding, ensuring a clean footprint after processing.
 
 ---
 
-## ## Technical Specifications
+## 🛠️ Tech Stack
 
-| Component | Technical Role |
+| Component | Technology |
 | :--- | :--- |
-| **Orchestration** | Streamlit |
-| **LLM Inference** | Google Gemini (Generative AI SDK) |
-| **Speech-to-Text** | Google Cloud Speech Recognition |
-| **Media Transcoding** | MoviePy (FFmpeg Wrapper) |
-| **Data Cleaning** | Regular Expressions & Datetime Delta logic |
-| **Storage** | Volatile `/tmp/` caching for audio artifacts |
+| **LLM Core** | Google Gemini Pro (`text-bison`) |
+| **App Framework** | Streamlit |
+| **Media Handling** | Pytube & MoviePy (FFmpeg) |
+| **Speech-to-Text** | Google Web Speech ASR |
+| **Data Logic** | Python `ast`, `re`, & `datetime` |
+
+---
+
+## 🧠 Intelligence Workflow
+
+* **Extraction:** Raw transcript strings are cleaned via Regex to remove non-narrative artifacts.
+* **Summarization:** A 300-word hierarchical summary is generated focusing on major discussed points while excluding speaker names.
+
+* **Keyword Mapping:** The LLM performs an entity-extraction pass, returning a Python-literal list of 10 core topics.
+* **Explainer Engine:** When a user selects a keyword, the system performs a targeted "Context-Search" to explain that specific term based on the video timeline.
+
+---
+
+## 📊 Technical Specifications
+
+### Prompting Strategy
+The system uses **Zero-Shot Prompting** for summarization and **Constrained Extraction** for keywords. By requesting a specific JSON/List format, the application uses `ast.literal_eval` to convert AI text directly into interactive UI elements.
+
+### Persistence Logic
+The app maintains a `merged_text` variable in the state:
+```python
+if 'merged_text' not in st.session_state:
+    st.session_state.merged_text = generated_transcript
+```
+This ensures that the "Question Answering" module can access the entire video's history instantaneously for zero-latency user queries.
